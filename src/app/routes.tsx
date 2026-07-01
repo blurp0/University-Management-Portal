@@ -5,6 +5,9 @@ import { LoginPage } from "@/pages/auth/LoginPage";
 import { RegisterPage } from "@/pages/auth/RegisterPage";
 import { OAuthCallbackPage } from "@/pages/auth/OAuthCallbackPage";
 import { StudentDashboard } from "@/pages/dashboard/StudentDashboard";
+import { StudentListPage } from "@/pages/students/StudentListPage";
+import { StudentDetailPage } from "@/pages/students/StudentDetailPage";
+import { EnrollmentsPage } from "@/pages/students/EnrollmentsPage";
 import { Role } from "@/types/user";
 
 export const router = createBrowserRouter([
@@ -34,7 +37,21 @@ export const router = createBrowserRouter([
         children: [
           {
             path: "",
-            element: <div>Students Page</div>,
+            element: <StudentListPage />,
+          },
+          {
+            path: ":id",
+            element: <StudentDetailPage />,
+          },
+        ],
+      },
+      {
+        path: "enrollments",
+        element: <ProtectedRoute allowedRoles={[Role.STUDENT]} />,
+        children: [
+          {
+            path: "",
+            element: <EnrollmentsPage />,
           },
         ],
       },

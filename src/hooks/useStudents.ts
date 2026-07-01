@@ -47,7 +47,7 @@ export const useStudents = (page = 1, limit = 10, search?: string) => {
   });
 
   return {
-    students: data?.data || [],
+    students: data?.students || [],
     total: data?.total || 0,
     totalPages: data?.totalPages || 0,
     isLoading,
