@@ -18,7 +18,7 @@ const registerSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
   confirmPassword: z.string(),
-  role: z.nativeEnum(Role),
+  role: z.enum([Role.STUDENT, Role.FACULTY]),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords don't match",
   path: ["confirmPassword"],
@@ -102,7 +102,7 @@ export function RegisterPage() {
               <Label htmlFor="role">I am a</Label>
               <Select
                 value={role}
-                onValueChange={(value) => setValue("role", value as Role)}
+                onValueChange={(value) => setValue("role", value as "STUDENT" | "FACULTY")}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select your role" />

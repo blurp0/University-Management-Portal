@@ -1,8 +1,11 @@
 import { createBrowserRouter } from "react-router-dom";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
+import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { LoginPage } from "@/pages/auth/LoginPage";
 import { RegisterPage } from "@/pages/auth/RegisterPage";
+import { OAuthCallbackPage } from "@/pages/auth/OAuthCallbackPage";
 import { StudentDashboard } from "@/pages/dashboard/StudentDashboard";
+import { Role } from "@/types/user";
 
 export const router = createBrowserRouter([
   {
@@ -14,6 +17,10 @@ export const router = createBrowserRouter([
     element: <RegisterPage />,
   },
   {
+    path: "/auth/callback",
+    element: <OAuthCallbackPage />,
+  },
+  {
     path: "/",
     element: <DashboardLayout />,
     children: [
@@ -23,11 +30,23 @@ export const router = createBrowserRouter([
       },
       {
         path: "students",
-        element: <div>Students Page</div>,
+        element: <ProtectedRoute allowedRoles={[Role.ADMIN, Role.FACULTY]} />,
+        children: [
+          {
+            path: "",
+            element: <div>Students Page</div>,
+          },
+        ],
       },
       {
         path: "faculty",
-        element: <div>Faculty Page</div>,
+        element: <ProtectedRoute allowedRoles={[Role.ADMIN]} />,
+        children: [
+          {
+            path: "",
+            element: <div>Faculty Page</div>,
+          },
+        ],
       },
       {
         path: "courses",
@@ -35,7 +54,13 @@ export const router = createBrowserRouter([
       },
       {
         path: "finance",
-        element: <div>Finance Page</div>,
+        element: <ProtectedRoute allowedRoles={[Role.STUDENT, Role.ADMIN]} />,
+        children: [
+          {
+            path: "",
+            element: <div>Finance Page</div>,
+          },
+        ],
       },
       {
         path: "settings",

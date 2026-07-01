@@ -3,13 +3,13 @@ import type { User, LoginRequest, RegisterRequest, AuthResponse } from "@/types/
 
 export const authService = {
   login: async (data: LoginRequest): Promise<AuthResponse> => {
-    const response = await api.post<AuthResponse>("/auth/login", data);
-    return response.data;
+    const response = await api.post<{ data: AuthResponse }>("/auth/login", data);
+    return response.data.data;
   },
 
   register: async (data: RegisterRequest): Promise<AuthResponse> => {
-    const response = await api.post<AuthResponse>("/auth/register", data);
-    return response.data;
+    const response = await api.post<{ data: AuthResponse }>("/auth/register", data);
+    return response.data.data;
   },
 
   logout: async (): Promise<void> => {
@@ -17,22 +17,12 @@ export const authService = {
   },
 
   getMe: async (): Promise<User> => {
-    const response = await api.get<User>("/auth/me");
-    return response.data;
+    const response = await api.get<{ data: User }>("/auth/me");
+    return response.data.data;
   },
 
-  refreshToken: async (refreshToken: string): Promise<AuthResponse> => {
-    const response = await api.post<AuthResponse>("/auth/refresh", {
-      refreshToken,
-    });
-    return response.data;
-  },
-
-  getGoogleAuthUrl: (): string => {
-    return `${api.defaults.baseURL}/auth/google`;
-  },
-
-  getGithubAuthUrl: (): string => {
-    return `${api.defaults.baseURL}/auth/github`;
+  refreshToken: async (): Promise<{ accessToken: string }> => {
+    const response = await api.post<{ data: { accessToken: string } }>("/auth/refresh");
+    return response.data.data;
   },
 };

@@ -20,24 +20,24 @@ export const useAuth = () => {
   const loginMutation = useMutation({
     mutationFn: (data: LoginRequest) => authService.login(data),
     onSuccess: (data) => {
-      login(data.user, data.accessToken, data.refreshToken);
+      login(data.user, data.accessToken);
       toast.success("Login successful!");
       navigate("/dashboard");
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || "Login failed");
+      toast.error(error.response?.data?.error || "Login failed");
     },
   });
 
   const registerMutation = useMutation({
     mutationFn: (data: RegisterRequest) => authService.register(data),
     onSuccess: (data) => {
-      login(data.user, data.accessToken, data.refreshToken);
+      login(data.user, data.accessToken);
       toast.success("Registration successful!");
       navigate("/dashboard");
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || "Registration failed");
+      toast.error(error.response?.data?.error || "Registration failed");
     },
   });
 

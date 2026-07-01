@@ -7,6 +7,7 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 const api: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
   timeout: 10000,
+  withCredentials: true,
   headers: {
     "Content-Type": "application/json",
   },
@@ -34,18 +35,15 @@ api.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const refreshToken = useAuthStore.getState().refreshToken;
-        if (refreshToken) {
-          const response = await axios.post(`${API_BASE_URL}/auth/refresh`, {
-            refreshToken,
-          });
+        const response = await axios.post(`${API_BASE_URL}/auth/refresh`, null, {
+          withCredentials: true,
+        });
 
-          const { accessToken, refreshToken: newRefreshToken } = response.data;
-          useAuthStore.getState().setTokens(accessToken, newRefreshToken);
+        const { accessToken } = response.data.data;
+        useAuthStore.getState().setAccessToken(accessToken);
 
-          originalRequest.headers.Authorization = `Bearer ${accessToken}`;
-          return api(originalRequest);
-        }
+        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+        return api(originalRequest);
       } catch (refreshError) {
         useAuthStore.getState().logout();
         window.location.href = "/login";
