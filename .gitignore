@@ -24,5 +24,9 @@ npm-debug.log*
 .DS_Store
 Thumbs.db
 
+# Playwright
+test-results/
+playwright-report/
+
 # Project plan
 SA-University-Management-Portal-Plan.md
